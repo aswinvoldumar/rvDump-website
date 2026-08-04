@@ -10,12 +10,10 @@ import { Testimonials } from './components/Testimonials'
 import { FAQ } from './components/FAQ'
 import { CTA } from './components/CTA'
 import { Footer } from './components/Footer'
-import { SmoothScroll } from './components/SmoothScroll'
 
 function App() {
   return (
     <div className="min-h-screen overflow-x-hidden">
-      <SmoothScroll />
       <Navbar />
       <main>
         <Hero />

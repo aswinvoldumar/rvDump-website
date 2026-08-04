@@ -106,11 +106,10 @@ export function Features() {
                   onClick={() => setActive(isOpen ? null : index)}
                   className={`border-gradient group relative flex h-full shrink-0 flex-col overflow-hidden rounded-3xl bg-surface/80 text-left shadow-[0_24px_80px_rgb(0_0_0/0.35)] backdrop-blur-xl transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] outline-none focus-visible:ring-2 focus-visible:ring-primary/50 ${
                     isOpen
-                      ? 'z-20 w-[260px] bg-surface-hover px-5 py-6 ring-1 ring-primary/30 glow-amber sm:w-[300px]'
+                      ? 'z-20 w-[220px] bg-surface-hover px-5 py-6 ring-1 ring-primary/30 glow-amber sm:w-[240px]'
                       : 'z-10 w-[72px] items-center px-2 py-6 hover:bg-surface-hover sm:w-[84px] lg:w-auto lg:min-w-[72px] lg:flex-1'
                   }`}
                 >
-                  {/* Icon — top aligned across all cards */}
                   <span
                     className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-primary/12 text-primary transition-transform duration-500 ${
                       isOpen ? 'mb-5 scale-110' : 'mb-6'
@@ -121,7 +120,6 @@ export function Features() {
 
                   {isOpen ? (
                     <>
-                      {/* Expanded: horizontal heading + description */}
                       <h3 className="font-body text-base font-semibold text-white">
                         {feature.title}
                       </h3>
@@ -130,7 +128,6 @@ export function Features() {
                       </p>
                     </>
                   ) : (
-                    /* Collapsed: vertical heading top → bottom */
                     <h3 className="font-body mt-auto mb-2 flex flex-1 items-end justify-center">
                       <span className="origin-center rotate-180 text-[11px] leading-tight font-semibold whitespace-nowrap text-white [writing-mode:vertical-rl] sm:text-xs">
                         {feature.title}

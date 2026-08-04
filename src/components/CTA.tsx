@@ -22,10 +22,10 @@ export function CTA() {
                     </p>
                   </FadeIn>
                   <motion.h2
-                    initial={{ opacity: 0, x: -48, clipPath: 'inset(0 100% 0 0)' }}
-                    whileInView={{ opacity: 1, x: 0, clipPath: 'inset(0 0% 0 0)' }}
-                    viewport={{ once: true, margin: '-80px' }}
-                    transition={{ duration: 0.9, delay: 0.05, ease: [0.22, 1, 0.36, 1] }}
+                    initial={{ opacity: 0, x: -40 }}
+                    whileInView={{ opacity: 1, x: 0 }}
+                    viewport={{ once: true, amount: 0.35 }}
+                    transition={{ duration: 0.75, ease: [0.22, 1, 0.36, 1] }}
                     className="font-body text-[1.75rem] leading-[1.15] font-light tracking-tight text-white sm:text-3xl md:text-4xl lg:text-[44px]"
                   >
                     Stop Managing Your RV Waste System Manually.
