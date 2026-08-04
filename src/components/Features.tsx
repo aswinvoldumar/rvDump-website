@@ -104,15 +104,15 @@ export function Features() {
                   onMouseEnter={() => setActive(index)}
                   onFocus={() => setActive(index)}
                   onClick={() => setActive(isOpen ? null : index)}
-                  className={`border-gradient group relative flex h-full shrink-0 flex-col overflow-hidden rounded-3xl bg-surface/80 text-left shadow-[0_24px_80px_rgb(0_0_0/0.35)] backdrop-blur-xl transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] outline-none focus-visible:ring-2 focus-visible:ring-primary/50 ${
+                  className={`group relative flex h-full shrink-0 flex-col overflow-hidden rounded-3xl bg-surface/80 text-left shadow-[0_24px_80px_rgb(0_0_0/0.35)] backdrop-blur-xl transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] outline-none ${
                     isOpen
-                      ? 'z-20 w-[220px] bg-surface-hover px-5 py-6 ring-1 ring-primary/30 glow-amber sm:w-[240px]'
-                      : 'z-10 w-[72px] items-center px-2 py-6 hover:bg-surface-hover sm:w-[84px] lg:w-auto lg:min-w-[72px] lg:flex-1'
+                      ? 'border-gradient z-20 w-[220px] px-5 py-6 glow-amber sm:w-[240px]'
+                      : 'z-10 w-[72px] items-center border border-white/8 px-2 py-6 sm:w-[84px] lg:w-auto lg:min-w-[72px] lg:flex-1'
                   }`}
                 >
                   <span
-                    className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-primary/12 text-primary transition-transform duration-500 ${
-                      isOpen ? 'mb-5 scale-110' : 'mb-6'
+                    className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-primary/12 text-primary ${
+                      isOpen ? 'mb-5' : 'mb-6'
                     }`}
                   >
                     <Icon className="h-5 w-5" />
