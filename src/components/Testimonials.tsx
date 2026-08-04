@@ -82,7 +82,7 @@ export function Testimonials() {
                     <Star key={i} className="h-4 w-4 fill-primary text-primary" />
                   ))}
                 </div>
-                <p className="font-body text-lg leading-relaxed font-light text-white sm:text-xl">
+                <p className="font-body text-lg leading-relaxed font-extralight text-white/90 sm:text-xl">
                   “{active.review}”
                 </p>
                 <div className="mt-8 flex items-center gap-4">

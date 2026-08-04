@@ -39,7 +39,7 @@ export function Footer() {
             >
               <span className="text-primary">RV</span> <span className="text-white">Dump</span>
             </a>
-            <p className="mt-4 max-w-sm font-body text-sm leading-relaxed font-light text-copper">
+            <p className="mt-4 max-w-sm font-body text-sm leading-relaxed font-extralight text-copper">
               The intelligent automation system that replaces manual RV waste disposal with
               hands-free precision.
             </p>

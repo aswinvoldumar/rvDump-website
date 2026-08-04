@@ -18,13 +18,31 @@
 
 @layer base {
   html {
-    scroll-behavior: smooth;
+    scroll-behavior: auto;
     color-scheme: dark;
+    scroll-padding-top: 5rem;
+  }
+
+  html.lenis,
+  html.lenis body {
+    height: auto;
+  }
+
+  .lenis.lenis-smooth {
+    scroll-behavior: auto !important;
+  }
+
+  .lenis.lenis-smooth [data-lenis-prevent] {
+    overscroll-behavior: contain;
+  }
+
+  .lenis.lenis-stopped {
+    overflow: hidden;
   }
 
   body {
     @apply bg-bg font-body text-text antialiased;
-    font-weight: 300;
+    font-weight: 200;
     background-image:
       radial-gradient(ellipse 80% 50% at 50% -20%, rgb(216 154 74 / 0.08), transparent),
       radial-gradient(ellipse 40% 30% at 90% 10%, rgb(167 104 45 / 0.06), transparent);

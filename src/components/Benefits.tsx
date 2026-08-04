@@ -57,7 +57,7 @@ export function Benefits() {
                     <Icon className="h-5 w-5" />
                   </span>
                   <h3 className="font-body text-base font-semibold text-white">{benefit.title}</h3>
-                  <p className="mt-3 font-body text-base leading-relaxed font-light text-copper">
+                  <p className="mt-3 font-body text-base leading-relaxed font-extralight text-copper">
                     {benefit.description}
                   </p>
                 </GlassCard>

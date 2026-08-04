@@ -125,7 +125,7 @@ export function Features() {
                       <h3 className="font-body text-base font-semibold text-white">
                         {feature.title}
                       </h3>
-                      <p className="font-body mt-3 text-sm leading-relaxed font-light text-copper">
+                      <p className="font-body mt-3 text-sm leading-relaxed font-extralight text-copper">
                         {feature.description}
                       </p>
                     </>

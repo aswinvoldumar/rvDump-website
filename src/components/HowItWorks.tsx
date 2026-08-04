@@ -78,7 +78,7 @@ export function HowItWorks() {
                           {step.title}
                         </h3>
                         {step.description && (
-                          <p className="mt-2 font-body text-sm leading-relaxed font-light text-copper">
+                          <p className="mt-2 font-body text-sm leading-relaxed font-extralight text-copper">
                             {step.description}
                           </p>
                         )}
@@ -119,7 +119,7 @@ export function HowItWorks() {
                       </div>
                     </div>
                     {step.description && (
-                      <p className="font-body text-sm leading-relaxed font-light text-copper">
+                      <p className="font-body text-sm leading-relaxed font-extralight text-copper">
                         {step.description}
                       </p>
                     )}
@@ -146,8 +146,8 @@ export function HowItWorks() {
         </div>
 
         <FadeIn delay={0.2}>
-          <p className="font-body mt-14 text-center text-2xl font-light tracking-tight text-white sm:text-3xl lg:text-4xl">
-            Done. <span className="text-primary">Clean.</span> Hands-Free.
+          <p className="font-body mt-14 text-center text-4xl font-light tracking-[0.22em] text-white/45 uppercase sm:text-5xl lg:text-6xl">
+            Done. <span className="text-primary/50">Clean.</span> Hands-Free.
           </p>
         </FadeIn>
       </Container>

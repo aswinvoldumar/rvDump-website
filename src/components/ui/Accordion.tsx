@@ -46,7 +46,7 @@ export function Accordion({ items }: AccordionProps) {
                   exit={{ height: 0, opacity: 0 }}
                   transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
                 >
-                  <p className="border-t border-white/5 px-6 pt-0 pb-5 font-body text-base leading-relaxed font-light text-copper">
+                  <p className="border-t border-white/5 px-6 pt-0 pb-5 font-body text-base leading-relaxed font-extralight text-copper">
                     <span className="mt-4 block">{item.answer}</span>
                   </p>
                 </motion.div>
