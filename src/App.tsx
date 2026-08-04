@@ -1,6 +1,5 @@
 import { Navbar } from './components/Navbar'
 import { Hero } from './components/Hero'
-import { TrustStats } from './components/TrustStats'
 import { Comparison } from './components/Comparison'
 import { HowItWorks } from './components/HowItWorks'
 import { Features } from './components/Features'
