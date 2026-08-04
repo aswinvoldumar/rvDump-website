@@ -58,7 +58,7 @@ export function LoadingScreen({ onReady }: LoadingScreenProps) {
       {visible && (
         <motion.div
           key="loader"
-          className="fixed inset-0 z-[100] flex items-center justify-center bg-primary"
+          className="fixed inset-0 z-[100] flex items-center justify-center bg-black"
           initial={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
@@ -66,7 +66,7 @@ export function LoadingScreen({ onReady }: LoadingScreenProps) {
           <div className="relative flex h-36 w-36 items-center justify-center sm:h-44 sm:w-44">
             {/* Loading circle */}
             <motion.div
-              className="absolute inset-0 rounded-full border-[3px] border-[#0a0a0a]/15 border-t-[#0a0a0a]"
+              className="absolute inset-0 rounded-full border-[3px] border-secondary/20 border-t-secondary"
               animate={{ rotate: 360 }}
               transition={{ duration: 0.9, repeat: Infinity, ease: 'linear' }}
             />
@@ -78,8 +78,8 @@ export function LoadingScreen({ onReady }: LoadingScreenProps) {
               transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
               className="font-body text-center text-2xl font-semibold tracking-tight sm:text-3xl"
             >
-              <span className="text-[#0a0a0a]">RV</span>{' '}
-              <span className="text-[#0a0a0a]/75">Dump</span>
+              <span className="text-secondary">RV</span>{' '}
+              <span className="text-white">Dump</span>
             </motion.div>
           </div>
         </motion.div>

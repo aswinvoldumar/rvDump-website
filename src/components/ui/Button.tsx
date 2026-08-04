@@ -16,7 +16,7 @@ type ButtonProps = {
 
 const variants: Record<Variant, string> = {
   primary:
-    'bg-gradient-amber text-[#0a0a0a] hover:shadow-[0_0_32px_rgb(216_154_74/0.45)] border border-transparent',
+    'bg-white text-[#0a0a0a] hover:bg-secondary hover:shadow-[0_0_32px_rgb(255_182_92/0.45)] border border-transparent',
   secondary:
     'glass text-white hover:bg-surface-hover hover:border-primary/40 border border-white/10',
   ghost: 'bg-transparent text-muted hover:text-white border border-transparent',
@@ -40,7 +40,7 @@ export function Button({
         {children}
       </span>
       {variant === 'primary' && (
-        <span className="pointer-events-none absolute inset-0 -translate-x-full bg-white/20 transition-transform duration-500 group-hover:translate-x-full" />
+        <span className="pointer-events-none absolute inset-0 -translate-x-full bg-black/10 transition-transform duration-500 group-hover:translate-x-full" />
       )}
     </>
   )
