@@ -1,7 +1,7 @@
 import { AnimatePresence, motion } from 'framer-motion'
 import { ArrowRight, ChevronDown, Volume2, VolumeX } from 'lucide-react'
 import { useCallback, useEffect, useRef, useState } from 'react'
-import heroPoster from '../assets/hero-bg.png'
+import { HERO_VIDEOS } from '../data/heroSlides'
 import { Container } from './ui/Container'
 
 const SLIDE_MS = 8000
@@ -13,7 +13,7 @@ const slides = [
     headline: 'Experiences Powered\nby Intelligence.',
     cta: 'Explore Automation',
     ctaHref: '#automation',
-    src: '/hero-bg.mp4',
+    src: HERO_VIDEOS[0],
   },
   {
     id: 1,
@@ -21,7 +21,7 @@ const slides = [
     headline: 'One Connection.\nZero Manual Work.',
     cta: 'See How It Works',
     ctaHref: '#how-it-works',
-    src: '/hero-slide-hose.mp4',
+    src: HERO_VIDEOS[1],
   },
   {
     id: 2,
@@ -29,7 +29,7 @@ const slides = [
     headline: 'Connect Once.\nThe System Takes Over.',
     cta: 'View Features',
     ctaHref: '#features',
-    src: '/hero-slide-flush.mp4',
+    src: HERO_VIDEOS[2],
   },
   {
     id: 3,
@@ -37,7 +37,7 @@ const slides = [
     headline: 'Precision Hardware.\nBuilt to Automate.',
     cta: 'See the Product',
     ctaHref: '#features',
-    src: '/hero-slide-device.mp4',
+    src: HERO_VIDEOS[3],
   },
 ]
 
@@ -99,7 +99,6 @@ export function Hero() {
           playsInline
           loop
           preload="auto"
-          poster={heroPoster}
           aria-hidden
         >
           <source src={active.src} type="video/mp4" />

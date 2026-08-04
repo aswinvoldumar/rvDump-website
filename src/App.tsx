@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { Navbar } from './components/Navbar'
 import { Hero } from './components/Hero'
 import { Comparison } from './components/Comparison'
@@ -10,24 +11,35 @@ import { Testimonials } from './components/Testimonials'
 import { FAQ } from './components/FAQ'
 import { CTA } from './components/CTA'
 import { Footer } from './components/Footer'
+import { SmoothScroll } from './components/SmoothScroll'
+import { LoadingScreen } from './components/LoadingScreen'
 
 function App() {
+  const [ready, setReady] = useState(false)
+
   return (
     <div className="min-h-screen overflow-x-hidden">
-      <Navbar />
-      <main>
-        <Hero />
-        <Comparison />
-        <HowItWorks />
-        <Features />
-        <ProductShowcase />
-        <MobileApp />
-        <Benefits />
-        <Testimonials />
-        <FAQ />
-        <CTA />
-      </main>
-      <Footer />
+      <LoadingScreen onReady={() => setReady(true)} />
+
+      {ready && (
+        <>
+          <SmoothScroll />
+          <Navbar />
+          <main>
+            <Hero />
+            <Comparison />
+            <HowItWorks />
+            <Features />
+            <ProductShowcase />
+            <MobileApp />
+            <Benefits />
+            <Testimonials />
+            <FAQ />
+            <CTA />
+          </main>
+          <Footer />
+        </>
+      )}
     </div>
   )
 }
