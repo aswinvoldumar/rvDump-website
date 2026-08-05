@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 import { Menu, X } from 'lucide-react'
+import { useDemoRequest } from '../context/DemoRequestContext'
 import { Button } from './ui/Button'
 import { Container } from './ui/Container'
 
@@ -17,6 +18,7 @@ const links = [
 export function Navbar() {
   const [scrolled, setScrolled] = useState(false)
   const [open, setOpen] = useState(false)
+  const { openDemoRequest } = useDemoRequest()
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 24)
@@ -59,7 +61,10 @@ export function Navbar() {
         </nav>
 
         <div className="flex items-center gap-3">
-          <Button href="#contact" className="hidden !px-5 !py-2.5 text-sm sm:inline-flex">
+          <Button
+            className="hidden !px-5 !py-2.5 text-sm sm:inline-flex"
+            onClick={openDemoRequest}
+          >
             Request Demo
           </Button>
           <button
@@ -92,7 +97,13 @@ export function Navbar() {
                   {link.label}
                 </a>
               ))}
-              <Button href="#contact" className="mt-2" onClick={() => setOpen(false)}>
+              <Button
+                className="mt-2"
+                onClick={() => {
+                  setOpen(false)
+                  openDemoRequest()
+                }}
+              >
                 Request Demo
               </Button>
             </Container>
