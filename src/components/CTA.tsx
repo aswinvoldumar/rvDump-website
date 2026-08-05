@@ -1,10 +1,13 @@
 import { motion } from 'framer-motion'
 import { FileText } from 'lucide-react'
+import { useDemoRequest } from '../context/DemoRequestContext'
 import { Button } from './ui/Button'
 import { Container } from './ui/Container'
 import { FadeIn } from './ui/FadeIn'
 
 export function CTA() {
+  const { openDemoRequest } = useDemoRequest()
+
   return (
     <section id="contact" className="relative py-20 lg:py-28">
       <Container>
@@ -40,7 +43,7 @@ export function CTA() {
               </div>
 
               <div className="mt-9 flex flex-wrap items-center gap-4 md:justify-start">
-                <Button href="#contact">Request Demo</Button>
+                <Button onClick={openDemoRequest}>Request Demo</Button>
                 <Button href="#features" variant="secondary">
                   <FileText className="h-4 w-4 shrink-0" aria-hidden />
                   <span>Download Brochure</span>

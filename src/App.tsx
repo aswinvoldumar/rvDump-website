@@ -13,34 +13,39 @@ import { CTA } from './components/CTA'
 import { Footer } from './components/Footer'
 import { SmoothScroll } from './components/SmoothScroll'
 import { LoadingScreen } from './components/LoadingScreen'
+import { DemoRequestModal } from './components/DemoRequestModal'
+import { DemoRequestProvider } from './context/DemoRequestContext'
 
 function App() {
   const [ready, setReady] = useState(false)
 
   return (
-    <div className="min-h-screen overflow-x-hidden">
-      <LoadingScreen onReady={() => setReady(true)} />
+    <DemoRequestProvider>
+      <div className="min-h-screen overflow-x-hidden">
+        <LoadingScreen onReady={() => setReady(true)} />
 
-      {ready && (
-        <>
-          <SmoothScroll />
-          <Navbar />
-          <main>
-            <Hero />
-            <Comparison />
-            <HowItWorks />
-            <Features />
-            <ProductShowcase />
-            <MobileApp />
-            <Benefits />
-            <Testimonials />
-            <FAQ />
-            <CTA />
-          </main>
-          <Footer />
-        </>
-      )}
-    </div>
+        {ready && (
+          <>
+            <SmoothScroll />
+            <Navbar />
+            <main>
+              <Hero />
+              <Comparison />
+              <HowItWorks />
+              <Features />
+              <ProductShowcase />
+              <MobileApp />
+              <Benefits />
+              <Testimonials />
+              <FAQ />
+              <CTA />
+            </main>
+            <Footer />
+            <DemoRequestModal />
+          </>
+        )}
+      </div>
+    </DemoRequestProvider>
   )
 }
 
