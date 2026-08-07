@@ -1,40 +1,204 @@
-import { motion } from 'framer-motion'
 import {
-  AlertTriangle,
-  Check,
   Droplets,
   Gauge,
-  Hand,
   ShieldCheck,
   Sparkles,
+  ToggleRight,
+  Waves,
   Wind,
-  Wrench,
-  X,
+  Zap,
 } from 'lucide-react'
+import { useEffect, useRef, useState } from 'react'
 import { Container } from './ui/Container'
 import { FadeIn } from './ui/FadeIn'
 import { SectionHeading } from './ui/SectionHeading'
 
-const traditional = [
-  { icon: Hand, label: 'Manual Valves' },
-  { icon: Wrench, label: 'Manual Pump' },
-  { icon: Gauge, label: 'Guess Tank Levels' },
-  { icon: Droplets, label: 'Messy Cleanup' },
-  { icon: Wind, label: 'Bad Odors' },
-  { icon: AlertTriangle, label: 'Overflow Risk' },
-  { icon: X, label: 'Multiple Steps' },
-]
+const COMPARISON_VIDEO = '/comparison-auto-vs-manual.mp4'
 
 const automated = [
-  { icon: Check, label: 'Automatic Valve Control' },
-  { icon: Check, label: 'Automatic Pump Operation' },
-  { icon: Check, label: 'Real-Time Monitoring' },
-  { icon: Check, label: 'Automatic Flush' },
+  { icon: ToggleRight, label: 'Automatic Valve Control' },
+  { icon: Zap, label: 'Automatic Pump Operation' },
+  { icon: Gauge, label: 'Real-Time Monitoring' },
+  { icon: Droplets, label: 'Automatic Flush' },
   { icon: ShieldCheck, label: 'Overflow Protection' },
   { icon: Sparkles, label: 'Leak Detection' },
   { icon: Wind, label: 'Odor Elimination' },
-  { icon: Check, label: 'One-Touch Automation' },
+  { icon: Waves, label: 'One-Touch Automation' },
 ]
+
+function ComparisonVideo() {
+  const videoRef = useRef<HTMLVideoElement>(null)
+  const frameRef = useRef<HTMLDivElement>(null)
+  const [aspectRatio, setAspectRatio] = useState('16 / 9')
+
+  useEffect(() => {
+    const video = videoRef.current
+    if (!video) return
+
+    const syncAspect = () => {
+      if (video.videoWidth > 0 && video.videoHeight > 0) {
+        setAspectRatio(`${video.videoWidth} / ${video.videoHeight}`)
+      }
+    }
+
+    syncAspect()
+    video.addEventListener('loadedmetadata', syncAspect)
+    return () => video.removeEventListener('loadedmetadata', syncAspect)
+  }, [])
+
+  useEffect(() => {
+    const video = videoRef.current
+    const frame = frameRef.current
+    if (!video || !frame) return
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          const playPromise = video.play()
+          if (playPromise) playPromise.catch(() => {})
+        } else {
+          video.pause()
+        }
+      },
+      { threshold: 0.35, rootMargin: '0px' },
+    )
+
+    observer.observe(frame)
+    return () => observer.disconnect()
+  }, [])
+
+  return (
+    <div
+      ref={frameRef}
+      className="border-gradient relative w-full overflow-hidden rounded-[1.5rem] bg-surface shadow-[0_30px_80px_rgb(0_0_0/0.45)] sm:rounded-[1.75rem]"
+      style={{ aspectRatio }}
+    >
+      <video
+        ref={videoRef}
+        src={COMPARISON_VIDEO}
+        className="absolute inset-0 h-full w-full object-contain"
+        muted
+        loop
+        playsInline
+        preload="metadata"
+        disablePictureInPicture
+        disableRemotePlayback
+        controls={false}
+        tabIndex={-1}
+        aria-label="Traditional versus automated RV waste disposal"
+      />
+
+      <div className="pointer-events-none absolute inset-0 bg-black/40" />
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_25%,rgb(0_0_0/0.35)_100%)]" />
+      <div className="pointer-events-none absolute inset-x-0 top-0 h-20 bg-gradient-to-b from-black/30 to-transparent" />
+      <div className="pointer-events-none absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-black/40 to-transparent" />
+      <div className="pointer-events-none absolute inset-0 ring-1 ring-inset ring-white/5" />
+
+      <div className="pointer-events-none absolute right-3 bottom-7 z-10 rounded-lg bg-black px-3 py-1.5 sm:right-4 sm:bottom-9 sm:px-3.5 sm:py-2">
+        <span className="font-body text-sm font-semibold tracking-tight sm:text-base">
+          <span className="text-primary">RV</span> <span className="text-white">Dump</span>
+        </span>
+      </div>
+    </div>
+  )
+}
+
+function AutomatedPoints() {
+  const listRef = useRef<HTMLUListElement>(null)
+  const [activeIndex, setActiveIndex] = useState(-1)
+
+  useEffect(() => {
+    const list = listRef.current
+    if (!list) return
+
+    let ticking = false
+
+    const update = () => {
+      ticking = false
+      const rect = list.getBoundingClientRect()
+      const viewH = window.innerHeight
+
+      // Progress through the list while it travels the viewport
+      const start = viewH * 0.72
+      const end = viewH * 0.28
+      const travel = start - end + rect.height
+      const scrolled = start - rect.top
+      const progress = Math.min(1, Math.max(0, scrolled / travel))
+
+      if (progress <= 0) {
+        setActiveIndex(-1)
+        return
+      }
+
+      const next = Math.min(
+        automated.length - 1,
+        Math.floor(progress * automated.length),
+      )
+      setActiveIndex(next)
+    }
+
+    const onScroll = () => {
+      if (ticking) return
+      ticking = true
+      requestAnimationFrame(update)
+    }
+
+    update()
+    window.addEventListener('scroll', onScroll, { passive: true })
+    window.addEventListener('resize', onScroll)
+    return () => {
+      window.removeEventListener('scroll', onScroll)
+      window.removeEventListener('resize', onScroll)
+    }
+  }, [])
+
+  return (
+    <div className="flex flex-col justify-center">
+      <p className="mb-8 text-xs font-semibold tracking-[0.22em] text-primary uppercase">
+        Automated Model
+      </p>
+
+      <ul ref={listRef} className="m-0 list-none space-y-1 p-0">
+        {automated.map((item, i) => {
+          const Icon = item.icon
+          const isActive = i === activeIndex
+          const isPast = i < activeIndex
+
+          return (
+            <li
+              key={item.label}
+              className={`flex items-center gap-3 py-3.5 transition-all duration-500 ease-out ${
+                isActive
+                  ? 'translate-x-1 opacity-100'
+                  : isPast
+                    ? 'opacity-70'
+                    : 'opacity-30'
+              }`}
+            >
+              <Icon
+                className={`h-4 w-4 shrink-0 transition-colors duration-500 ${
+                  isActive ? 'text-secondary' : isPast ? 'text-primary/70' : 'text-muted/50'
+                }`}
+                aria-hidden
+              />
+              <span
+                className={`font-body text-base tracking-tight transition-colors duration-500 sm:text-lg ${
+                  isActive
+                    ? 'font-medium text-secondary'
+                    : isPast
+                      ? 'font-light text-white'
+                      : 'font-light text-muted'
+                }`}
+              >
+                {item.label}
+              </span>
+            </li>
+          )
+        })}
+      </ul>
+    </div>
+  )
+}
 
 export function Comparison() {
   return (
@@ -46,82 +210,13 @@ export function Comparison() {
           description="From a messy multi-step ritual to a single connection and intelligent control."
         />
 
-        <div className="mt-14 grid gap-6 lg:grid-cols-2">
-          <FadeIn>
-            <div className="h-full rounded-3xl border border-white/8 bg-surface/60 p-6 sm:p-8">
-              <div className="mb-6 flex items-center gap-3">
-                <span className="flex h-10 w-10 items-center justify-center rounded-2xl bg-white/5 text-muted">
-                  <X className="h-5 w-5" />
-                </span>
-                <div>
-                  <p className="text-xs font-semibold tracking-[0.18em] text-muted uppercase">
-                    Before
-                  </p>
-                  <h3 className="font-body text-base font-semibold text-white">
-                    Traditional RV Waste Disposal
-                  </h3>
-                </div>
-              </div>
-
-              <div className="space-y-3">
-                {traditional.map((item, i) => {
-                  const Icon = item.icon
-                  return (
-                    <motion.div
-                      key={item.label}
-                      initial={{ opacity: 0, x: -16 }}
-                      whileInView={{ opacity: 1, x: 0 }}
-                      viewport={{ once: true }}
-                      transition={{ delay: i * 0.06 }}
-                      className="flex items-center gap-3 rounded-2xl border border-white/5 bg-black/30 px-4 py-3.5"
-                    >
-                      <Icon className="h-4 w-4 text-red-400/80" />
-                      <span className="text-sm text-muted line-through decoration-white/20">
-                        {item.label}
-                      </span>
-                    </motion.div>
-                  )
-                })}
-              </div>
-            </div>
+        <div className="mt-12 grid items-center gap-10 lg:mt-14 lg:grid-cols-[minmax(0,0.85fr)_minmax(0,1.55fr)] lg:gap-12 xl:gap-16">
+          <FadeIn direction="right">
+            <AutomatedPoints />
           </FadeIn>
 
-          <FadeIn delay={0.1}>
-            <div className="border-gradient relative h-full overflow-hidden rounded-3xl bg-surface/80 p-6 shadow-[0_0_60px_rgb(216_154_74/0.08)] sm:p-8">
-              <div className="pointer-events-none absolute -top-20 -right-16 h-56 w-56 rounded-full bg-primary/15 blur-3xl" />
-              <div className="relative mb-6 flex items-center gap-3">
-                <span className="flex h-10 w-10 items-center justify-center rounded-2xl bg-primary/15 text-primary">
-                  <Sparkles className="h-5 w-5" />
-                </span>
-                <div>
-                  <p className="text-xs font-semibold tracking-[0.18em] text-primary uppercase">
-                    After
-                  </p>
-                  <h3 className="font-body text-base font-semibold text-white">
-                    Our Smart Automation
-                  </h3>
-                </div>
-              </div>
-
-              <div className="relative space-y-3">
-                {automated.map((item, i) => {
-                  const Icon = item.icon
-                  return (
-                    <motion.div
-                      key={item.label}
-                      initial={{ opacity: 0, x: 16 }}
-                      whileInView={{ opacity: 1, x: 0 }}
-                      viewport={{ once: true }}
-                      transition={{ delay: i * 0.06 }}
-                      className="flex items-center gap-3 rounded-2xl border border-primary/15 bg-primary/5 px-4 py-3.5"
-                    >
-                      <Icon className="h-4 w-4 text-primary" />
-                      <span className="text-sm font-medium text-white">{item.label}</span>
-                    </motion.div>
-                  )
-                })}
-              </div>
-            </div>
+          <FadeIn delay={0.1} direction="left" className="w-full lg:sticky lg:top-28">
+            <ComparisonVideo />
           </FadeIn>
         </div>
       </Container>
