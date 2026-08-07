@@ -12,6 +12,7 @@ import { FAQ } from './components/FAQ'
 import { CTA } from './components/CTA'
 import { Footer } from './components/Footer'
 import { SmoothScroll } from './components/SmoothScroll'
+import { ScrollToTop } from './components/ScrollToTop'
 import { LoadingScreen } from './components/LoadingScreen'
 import { DemoRequestModal } from './components/DemoRequestModal'
 import { DemoRequestProvider } from './context/DemoRequestContext'
@@ -42,6 +43,7 @@ function App() {
             </main>
             <Footer />
             <DemoRequestModal />
+            <ScrollToTop />
           </>
         )}
       </div>
