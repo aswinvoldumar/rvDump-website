@@ -1,5 +1,6 @@
 import { useEffect } from 'react'
 import Lenis from 'lenis'
+import { setLenisInstance } from '../lib/lenis'
 
 export function SmoothScroll() {
   useEffect(() => {
@@ -9,6 +10,8 @@ export function SmoothScroll() {
       smoothWheel: true,
       touchMultiplier: 1.4,
     })
+
+    setLenisInstance(lenis)
 
     let frame = 0
     const raf = (time: number) => {
@@ -37,6 +40,7 @@ export function SmoothScroll() {
     return () => {
       document.removeEventListener('click', onAnchorClick)
       cancelAnimationFrame(frame)
+      setLenisInstance(null)
       lenis.destroy()
     }
   }, [])
