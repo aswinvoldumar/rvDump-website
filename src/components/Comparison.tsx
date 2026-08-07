@@ -1,6 +1,7 @@
 import {
   Droplets,
   Gauge,
+  Loader2,
   ShieldCheck,
   Sparkles,
   ToggleRight,
@@ -30,6 +31,7 @@ function ComparisonVideo() {
   const videoRef = useRef<HTMLVideoElement>(null)
   const frameRef = useRef<HTMLDivElement>(null)
   const [aspectRatio, setAspectRatio] = useState('16 / 9')
+  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     const video = videoRef.current
@@ -41,9 +43,29 @@ function ComparisonVideo() {
       }
     }
 
+    const markReady = () => {
+      syncAspect()
+      setLoading(false)
+    }
+
+    if (video.readyState >= 2) {
+      markReady()
+    }
+
     syncAspect()
     video.addEventListener('loadedmetadata', syncAspect)
-    return () => video.removeEventListener('loadedmetadata', syncAspect)
+    video.addEventListener('loadeddata', markReady)
+    video.addEventListener('canplay', markReady)
+    video.addEventListener('playing', markReady)
+    video.addEventListener('error', markReady)
+
+    return () => {
+      video.removeEventListener('loadedmetadata', syncAspect)
+      video.removeEventListener('loadeddata', markReady)
+      video.removeEventListener('canplay', markReady)
+      video.removeEventListener('playing', markReady)
+      video.removeEventListener('error', markReady)
+    }
   }, [])
 
   useEffect(() => {
@@ -76,11 +98,13 @@ function ComparisonVideo() {
       <video
         ref={videoRef}
         src={COMPARISON_VIDEO}
-        className="absolute inset-0 h-full w-full object-contain"
+        className={`absolute inset-0 h-full w-full object-contain transition-opacity duration-500 ${
+          loading ? 'opacity-0' : 'opacity-100'
+        }`}
         muted
         loop
         playsInline
-        preload="metadata"
+        preload="auto"
         disablePictureInPicture
         disableRemotePlayback
         controls={false}
@@ -88,10 +112,23 @@ function ComparisonVideo() {
         aria-label="Traditional versus automated RV waste disposal"
       />
 
-      <div className="pointer-events-none absolute inset-0 bg-black/40" />
-      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_25%,rgb(0_0_0/0.35)_100%)]" />
-      <div className="pointer-events-none absolute inset-x-0 top-0 h-20 bg-gradient-to-b from-black/30 to-transparent" />
-      <div className="pointer-events-none absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-black/40 to-transparent" />
+      {loading && (
+        <div
+          className="absolute inset-0 z-20 flex flex-col items-center justify-center gap-3 bg-surface"
+          aria-live="polite"
+          aria-busy="true"
+        >
+          <Loader2 className="h-8 w-8 animate-spin text-primary" aria-hidden />
+          <span className="font-body text-xs tracking-[0.18em] text-muted uppercase">
+            Loading video
+          </span>
+        </div>
+      )}
+
+      <div className="pointer-events-none absolute inset-0 bg-black/15" />
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_25%,rgb(0_0_0/0.15)_100%)]" />
+      <div className="pointer-events-none absolute inset-x-0 top-0 h-20 bg-gradient-to-b from-black/15 to-transparent" />
+      <div className="pointer-events-none absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-black/20 to-transparent" />
       <div className="pointer-events-none absolute inset-0 ring-1 ring-inset ring-white/5" />
 
       <div className="pointer-events-none absolute right-3 bottom-7 z-10 rounded-lg bg-black px-3 py-1.5 sm:right-4 sm:bottom-9 sm:px-3.5 sm:py-2">
