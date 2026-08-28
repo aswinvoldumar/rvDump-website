@@ -4,8 +4,6 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 import { HERO_VIDEOS } from '../data/heroSlides'
 import { Container } from './ui/Container'
 
-const SLIDE_MS = 8000
-
 const slides = [
   {
     id: 0,
@@ -39,6 +37,22 @@ const slides = [
     ctaHref: '#features',
     src: HERO_VIDEOS[3],
   },
+  {
+    id: 4,
+    title: 'Remote Control',
+    headline: 'Monitor Anywhere.\nControl From Your Phone.',
+    cta: 'Explore the App',
+    ctaHref: '#mobile-app',
+    src: HERO_VIDEOS[4],
+  },
+  {
+    id: 5,
+    title: 'Complete Cycle',
+    headline: 'Done. Clean.\nHands-Free.',
+    cta: 'Get Started',
+    ctaHref: '#contact',
+    src: HERO_VIDEOS[5],
+  },
 ]
 
 export function Hero() {
@@ -46,47 +60,65 @@ export function Hero() {
   const [muted, setMuted] = useState(true)
   const [progress, setProgress] = useState(0)
   const videoRef = useRef<HTMLVideoElement>(null)
-  const startRef = useRef(Date.now())
   const frameRef = useRef<number | null>(null)
+  const indexRef = useRef(0)
 
   const active = slides[index]
   const next = slides[(index + 1) % slides.length]
 
   const goTo = useCallback((nextIndex: number) => {
-    setIndex(((nextIndex % slides.length) + slides.length) % slides.length)
+    const resolved = ((nextIndex % slides.length) + slides.length) % slides.length
+    indexRef.current = resolved
+    setIndex(resolved)
     setProgress(0)
-    startRef.current = Date.now()
   }, [])
 
   useEffect(() => {
-    startRef.current = Date.now()
-    setProgress(0)
-
-    const tick = () => {
-      const elapsed = Date.now() - startRef.current
-      const pct = Math.min(elapsed / SLIDE_MS, 1)
-      setProgress(pct)
-      if (pct >= 1) {
-        goTo(index + 1)
-        return
-      }
-      frameRef.current = requestAnimationFrame(tick)
-    }
-
-    frameRef.current = requestAnimationFrame(tick)
-    return () => {
-      if (frameRef.current) cancelAnimationFrame(frameRef.current)
-    }
-  }, [index, goTo])
+    indexRef.current = index
+  }, [index])
 
   useEffect(() => {
     const video = videoRef.current
     if (!video) return
+
     video.pause()
+    video.loop = false
     video.src = active.src
     video.load()
     void video.play().catch(() => {})
-  }, [active.src])
+
+    const syncProgress = () => {
+      const duration = video.duration
+      if (Number.isFinite(duration) && duration > 0) {
+        setProgress(Math.min(1, video.currentTime / duration))
+      }
+      frameRef.current = requestAnimationFrame(syncProgress)
+    }
+
+    const onEnded = () => {
+      goTo(indexRef.current + 1)
+    }
+
+    const onLoadedMetadata = () => {
+      setProgress(0)
+    }
+
+    video.addEventListener('ended', onEnded)
+    video.addEventListener('loadedmetadata', onLoadedMetadata)
+    frameRef.current = requestAnimationFrame(syncProgress)
+
+    return () => {
+      video.removeEventListener('ended', onEnded)
+      video.removeEventListener('loadedmetadata', onLoadedMetadata)
+      if (frameRef.current) cancelAnimationFrame(frameRef.current)
+    }
+  }, [active.src, goTo])
+
+  useEffect(() => {
+    const video = videoRef.current
+    if (!video) return
+    video.muted = muted
+  }, [muted])
 
   return (
     <section id="home" className="relative h-[100svh] min-h-[640px] overflow-hidden">
@@ -97,12 +129,9 @@ export function Hero() {
           autoPlay
           muted={muted}
           playsInline
-          loop
           preload="auto"
           aria-hidden
-        >
-          <source src={active.src} type="video/mp4" />
-        </video>
+        />
 
         <div className="absolute inset-0 bg-gradient-to-r from-black/75 via-black/35 to-transparent" />
         <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-black/35" />

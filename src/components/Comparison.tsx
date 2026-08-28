@@ -14,7 +14,7 @@ import { Container } from './ui/Container'
 import { FadeIn } from './ui/FadeIn'
 import { SectionHeading } from './ui/SectionHeading'
 
-const COMPARISON_VIDEO = '/comparison-auto-vs-manual.mp4'
+const COMPARISON_VIDEO = '/comparison.mp4'
 
 const automated = [
   { icon: ToggleRight, label: 'Automatic Valve Control' },
