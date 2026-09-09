@@ -12,6 +12,10 @@ const slides = [
     cta: 'Explore Automation',
     ctaHref: '#automation',
     src: HERO_VIDEOS[0],
+    fit: 'cover' as const,
+    bg: '#050505',
+    scale: 1,
+    align: 'center' as const,
   },
   {
     id: 1,
@@ -20,30 +24,34 @@ const slides = [
     cta: 'View Features',
     ctaHref: '#features',
     src: HERO_VIDEOS[1],
+    fit: 'cover' as const,
+    bg: '#050505',
+    scale: 1,
+    align: 'center' as const,
   },
   {
     id: 2,
-    title: 'Smart Controller',
-    headline: 'Precision Hardware.\nBuilt to Automate.',
-    cta: 'See the Product',
-    ctaHref: '#features',
-    src: HERO_VIDEOS[2],
-  },
-  {
-    id: 3,
     title: 'Remote Control',
     headline: 'Monitor Anywhere.\nControl From Your Phone.',
     cta: 'Explore the App',
     ctaHref: '#mobile-app',
-    src: HERO_VIDEOS[3],
+    src: HERO_VIDEOS[2],
+    fit: 'contain' as const,
+    bg: '#111111',
+    scale: 0.72,
+    align: 'right' as const,
   },
   {
-    id: 4,
-    title: 'Complete Cycle',
-    headline: 'Done. Clean.\nHands-Free.',
-    cta: 'Get Started',
-    ctaHref: '#contact',
-    src: HERO_VIDEOS[4],
+    id: 3,
+    title: 'Auto Cleaning',
+    headline: 'Automatic Cleaning.\nFresh Every Cycle.',
+    cta: 'View Features',
+    ctaHref: '#features',
+    src: HERO_VIDEOS[3],
+    fit: 'cover' as const,
+    bg: '#050505',
+    scale: 1,
+    align: 'center' as const,
   },
 ]
 
@@ -114,10 +122,16 @@ export function Hero() {
 
   return (
     <section id="home" className="relative h-[100svh] min-h-[640px] overflow-hidden">
-      <div className="absolute inset-0">
+      <div className="absolute inset-0 transition-colors duration-500" style={{ backgroundColor: active.bg }}>
         <video
           ref={videoRef}
-          className="h-full w-full object-cover object-center"
+          className={`h-full w-full transition-[object-fit,transform] duration-500 ${
+            active.fit === 'contain' ? 'object-contain' : 'object-cover'
+          } ${active.align === 'right' ? 'object-right' : 'object-center'}`}
+          style={{
+            transform: `scale(${active.scale})`,
+            transformOrigin: active.align === 'right' ? 'right center' : 'center center',
+          }}
           autoPlay
           muted={muted}
           playsInline
@@ -125,7 +139,13 @@ export function Hero() {
           aria-hidden
         />
 
-        <div className="absolute inset-0 bg-gradient-to-r from-black/75 via-black/35 to-transparent" />
+        <div
+          className={`absolute inset-0 bg-gradient-to-r to-transparent ${
+            active.align === 'right'
+              ? 'from-black/85 via-black/55 via-45%'
+              : 'from-black/75 via-black/35'
+          }`}
+        />
         <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-black/35" />
       </div>
 
@@ -162,7 +182,10 @@ export function Hero() {
             onClick={() => goTo(index + 1)}
             className="group flex w-full items-center gap-3 px-3 pt-3 pb-2.5 text-left transition hover:bg-white/5"
           >
-            <div className="relative h-12 w-16 shrink-0 overflow-hidden rounded-sm bg-surface">
+            <div
+              className="relative h-12 w-16 shrink-0 overflow-hidden rounded-sm"
+              style={{ backgroundColor: next.bg }}
+            >
               <video
                 key={next.src}
                 src={next.src}
@@ -171,7 +194,9 @@ export function Hero() {
                 autoPlay
                 loop
                 preload="metadata"
-                className="h-full w-full object-cover opacity-90 transition duration-500 group-hover:scale-105"
+                className={`h-full w-full opacity-90 transition duration-500 group-hover:scale-105 ${
+                  next.fit === 'contain' ? 'object-contain' : 'object-cover'
+                }`}
               />
             </div>
             <div className="min-w-0">
