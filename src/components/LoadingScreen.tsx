@@ -1,18 +1,14 @@
 import { AnimatePresence, motion } from 'framer-motion'
 import { useEffect, useState } from 'react'
-import { HERO_VIDEOS } from '../data/heroSlides'
+import { HERO_IMAGE } from '../data/heroSlides'
 
 type LoadingScreenProps = {
   onReady: () => void
 }
 
-function preloadVideo(src: string) {
+function preloadImage(src: string) {
   return new Promise<void>((resolve) => {
-    const video = document.createElement('video')
-    video.preload = 'auto'
-    video.muted = true
-    video.playsInline = true
-
+    const img = new Image()
     let settled = false
     const done = () => {
       if (settled) return
@@ -20,14 +16,10 @@ function preloadVideo(src: string) {
       resolve()
     }
 
-    video.addEventListener('canplaythrough', done, { once: true })
-    video.addEventListener('loadeddata', done, { once: true })
-    video.addEventListener('error', done, { once: true })
-    video.src = src
-    video.load()
-
-    // Safety timeout per video
-    window.setTimeout(done, 10000)
+    img.onload = done
+    img.onerror = done
+    img.src = src
+    window.setTimeout(done, 8000)
   })
 }
 
@@ -36,14 +28,9 @@ export function LoadingScreen({ onReady }: LoadingScreenProps) {
 
   useEffect(() => {
     let cancelled = false
-    const minDisplay = new Promise((r) => window.setTimeout(r, 1200))
+    const minDisplay = new Promise((r) => window.setTimeout(r, 1000))
 
-    Promise.all([
-      // Prioritize first hero video, also warm the rest
-      preloadVideo(HERO_VIDEOS[0]),
-      ...HERO_VIDEOS.slice(1).map((src) => preloadVideo(src)),
-      minDisplay,
-    ]).then(() => {
+    Promise.all([preloadImage(HERO_IMAGE), minDisplay]).then(() => {
       if (cancelled) return
       setVisible(false)
     })
@@ -64,14 +51,12 @@ export function LoadingScreen({ onReady }: LoadingScreenProps) {
           transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
         >
           <div className="relative flex h-36 w-36 items-center justify-center sm:h-44 sm:w-44">
-            {/* Loading circle */}
             <motion.div
               className="absolute inset-0 rounded-full border-[3px] border-secondary/20 border-t-secondary"
               animate={{ rotate: 360 }}
               transition={{ duration: 0.9, repeat: Infinity, ease: 'linear' }}
             />
 
-            {/* Center logo */}
             <motion.div
               initial={{ opacity: 0, scale: 0.92 }}
               animate={{ opacity: 1, scale: 1 }}
